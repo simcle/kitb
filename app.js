@@ -11,7 +11,7 @@ const client  = mqtt.connect('mqtts://mqtt.ndpteknologi.com:8883', {
     password: 'pwlan123',
     keepalive: 30,
     will: {
-        topic: `kitb/status/${device_id}`,
+        topic: `kitb/${device_id}/status`,
         payload: "offline",
         qos: 0
     }
@@ -70,9 +70,9 @@ setInterval(() => {
 
     let data = JSON.stringify(sensor)
 
-    client.publish(`kitb/status/${device_id}`, 'online')
+    client.publish(`kitb/${device_id}/status`, 'online')
 
-    client.publish(`kitb/sensor/${device_id}`, data)
+    client.publish(`kitb/${device_id}/sensor`, data)
 
 }, 500)
 
