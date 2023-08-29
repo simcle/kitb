@@ -11,7 +11,7 @@ const client  = mqtt.connect('mqtts://mqtt.ndpteknologi.com:8883', {
     password: 'pwlan123',
     keepalive: 30,
     will: {
-        topic: `status/${device_id}`,
+        topic: `kitb/status/${device_id}`,
         payload: "offline",
         qos: 0
     }
@@ -45,10 +45,15 @@ let sensor = {
 const chemin = new modbusRTU();
 chemin.connectRTUBuffered('/dev/ttyAMA3', {baudRate: 9600});
 
+const flow = new modbusRTU();
+flow.connectRTUBuffered('/db/ttyAMA0', {baudRate});
+
+
 // GET DATA FROM DEVICE
 setInterval(() => {
     let date = new Date()
     let now = Math.round(date.getTime() / 1000);
+
     chemin.readHoldingRegisters(8, 48, (err, data) => {
         sensor.ph = data.buffer.readFloatBE(0).toFixed(3)
         sensor.temp = data.buffer.readFloatBE(4).toFixed(3)
@@ -57,13 +62,17 @@ setInterval(() => {
         sensor.tss = data.buffer.readFloatBE(88).toFixed(3)
     })
 
+    flow.readHoldingRegisters(0, 10, (err, data) => {
+        console.log(err, data)
+    })
+
     sensor.timestamp = now
 
     let data = JSON.stringify(sensor)
 
-    client.publish(`status/${device_id}`, 'online')
+    client.publish(`kitb/status/${device_id}`, 'online')
 
-    client.publish(`sensor/${device_id}`, data)
+    client.publish(`kitb/sensor/${device_id}`, data)
 
 }, 500)
 
