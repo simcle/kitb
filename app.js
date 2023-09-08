@@ -42,11 +42,11 @@ let sensor = {
     timestamp: ''
 };
 
-// const chemin = new modbusRTU();
-// chemin.connectRTUBuffered('/dev/ttyAMA3', {baudRate: 9600});
+const chemin = new modbusRTU();
+chemin.connectRTUBuffered('/dev/ttyAMA3', {baudRate: 9600});
 
-// const flow = new modbusRTU();
-// flow.connectRTUBuffered('/dev/ttyAMA0', {baudRate: 9600});
+const flow = new modbusRTU();
+flow.connectRTUBuffered('/dev/ttyAMA0', {baudRate: 9600});
 
 
 // GET DATA FROM DEVICE
